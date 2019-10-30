@@ -1,0 +1,49 @@
+{% extends "base.twig" %}
+
+{% block title %}Study{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div id="text-content">
+            <h1 class="display-4">{{ title|default('kein Titel vorhanden') }}</h1>
+
+            <div id="text-content-text">
+                <p>
+                    {{ paragraphs|default('kein Text vorhanden')|raw }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="player">
+        <div id="progress-bar-wrapper">
+            <div id="progress-bar"></div>
+        </div>
+
+        <div id="actions">
+            <ul class="list-unstyled">
+                <li id="action-jump-left">
+                    <span class="oi oi-action-undo"></span>
+                </li>
+
+                <li id="action-toggle-play">
+                    <span class="oi oi-media-play"></span>
+                </li>
+
+                <li id="action-jump-right">
+                    <span class="oi oi-action-redo"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+
+    $(function () {
+        TextLearning.init('{{ audio }}');
+    });
+
+    </script>
+{% endblock %}

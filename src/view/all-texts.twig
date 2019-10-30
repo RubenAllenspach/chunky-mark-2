@@ -1,0 +1,29 @@
+{% extends "base.twig" %}
+
+{% block title %}Alle Texte{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="py-5">Alle Texte</h1>
+
+        <table class="table">
+            <tr>
+                <th>Titel</th>
+                <th>Datum</th>
+                <th>Aktionen</th>
+            </tr>
+
+            {% for text in texts %}
+                <tr>
+                    <td>{{ text.title }}</td>
+                    <td>{{ text.created }}</td>
+                    <td>
+                        <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
+                            <span class="oi oi-media-play"></span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

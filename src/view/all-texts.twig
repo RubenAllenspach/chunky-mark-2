@@ -6,24 +6,37 @@
     <div class="container">
         <h1 class="py-5">Alle Texte</h1>
 
-        <table class="table">
-            <tr>
-                <th>Titel</th>
-                <th>Datum</th>
-                <th>Aktionen</th>
-            </tr>
-
-            {% for text in texts %}
+        <table class="table" id="text-list">
+            <thead>
                 <tr>
-                    <td>{{ text.title }}</td>
-                    <td>{{ text.created }}</td>
-                    <td>
-                        <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
-                            <span class="oi oi-media-play"></span>
-                        </a>
-                    </td>
+                    <th>Titel</th>
+                    <th>Datum</th>
+                    <th>Aktionen</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for text in texts %}
+                    <tr>
+                        <td>{{ text.title }}</td>
+                        <td>{{ text.created }}</td>
+                        <td>
+                            <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
+                                <span class="oi oi-media-play"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+$(function () {
+    $('#text-list').DataTable();
+})
+</script>
+
 {% endblock %}

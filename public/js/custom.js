@@ -1,9 +1,10 @@
 var Player = /** @class */ (function () {
-    function Player(audioFile, playbackRate) {
+    function Player(audioFile, progressBar, playbackRate) {
         var self = this;
 
-        this.rate  = typeof b === 'undefined' ? playbackRate : 1;
-        this.sound = new Howl(
+        this.progressBar = progressBar;
+        this.rate        = typeof b === 'undefined' ? playbackRate : 1;
+        this.sound       = new Howl(
             {
                 // use given rate
                 rate: self.rate,
@@ -57,7 +58,7 @@ var Player = /** @class */ (function () {
     Player.prototype.stop = function () {
         this.sound.stop();
 
-        $('#progress-bar').css(
+        $(this.progressBar).css(
             {
                 'width': '0%'
             }
@@ -69,17 +70,17 @@ var Player = /** @class */ (function () {
     };
 
     Player.prototype.increasePosition = function (inc) {
-        this.sound.seek(this.sound.seek() + inc);
+        this.sound.seek(this.sound.seek() + inc > this.sound.duration() ? 0 : this.sound.seek() + inc);
     };
 
     Player.prototype.decreasePosition = function (dec) {
-        this.sound.seek(this.sound.seek() - dec);
+        this.sound.seek(this.sound.seek() < dec ? 0 : this.sound.seek() - dec);
     };
 
     Player.prototype.step = function () {
         var seek = this.sound.seek() || 0;
 
-        $('#progress-bar').css(
+        $(this.progressBar).css(
             {
                 'width': ((seek / this.sound.duration()) * 100 || 0) + '%'
             }
@@ -193,19 +194,14 @@ var TextLearning = (function () {
             player.decreasePosition(POS_JUMP);
         });
 
-        // jump x seconds to the left
-        $(document).on('click', '#action-jump-left', function () {
-            player.decreasePosition(POS_JUMP);
-        });
-
         // jump x seconds to the right
         $(document).on('click', '#action-jump-right', function () {
             player.increasePosition(POS_JUMP);
-        })
+        });
 
-        // play or pause
-        $(document).on('click', '#action-toggle-play', function () {
-            player.play();
+        // jump x seconds to the left
+        $(document).on('click', '#action-jump-left', function () {
+            player.decreasePosition(POS_JUMP);
         });
 
         // set progress bar to position clicked
@@ -216,7 +212,7 @@ var TextLearning = (function () {
 
     return {
         init: function (audioFile) {
-            player = new Player('/audio/' + audioFile);
+            player = new Player('/audio/' + audioFile, '#progress-bar');
 
             setEvents();
         }
@@ -249,7 +245,7 @@ var EditPage = (function () {
 
     return {
         init: function () {
-            $("form#new-text").submit(function(e) {
+            $('form#new-text').submit(function(e) {
                 e.preventDefault();
 
                 Loader.show();

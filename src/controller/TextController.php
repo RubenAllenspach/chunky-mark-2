@@ -46,9 +46,7 @@ class TextController
      */
     public function showAll($dc, $request)
     {
-        $db = $dc['db'];
-
-        $texts = $db->get("SELECT * FROM texts WHERE deleted=0");
+        $texts = $dc['db']->get("SELECT * FROM texts WHERE deleted=0");
 
         return $dc['twig']->render('all-texts.twig', ['texts' => $texts]);
     }
@@ -59,8 +57,6 @@ class TextController
     public function store($dc, $request)
     {
         header('Content-Type: application/json');
-
-        $db = $dc['db'];
 
         $mimes = [
             'audio/mp3',
@@ -76,7 +72,7 @@ class TextController
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
 
-            $db->query(
+            $dc['db']->query(
                 "INSERT INTO texts (
                     `title`,
                     `text`,

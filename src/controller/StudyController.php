@@ -6,9 +6,7 @@ class StudyController
 {
     public function show($dc, $request)
     {
-        $db = $dc['db'];
-
-        $row = $db->getOne(
+        $row = $dc['db']->getOne(
             "SELECT * FROM texts WHERE id=:id",
             [':id' => $request['param']['id']]
         );

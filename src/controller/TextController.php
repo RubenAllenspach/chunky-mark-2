@@ -8,6 +8,10 @@ class TextController
 
     /**
      * Generates a random string
+     *
+     * @param int $length
+     *
+     * @return string
      */
     private function randomString($length=8): string
     {
@@ -16,6 +20,11 @@ class TextController
 
     /**
      * Moves uploaded audio file to correct folder
+     *
+     * @param string $filename
+     * @param string $new_filename
+     *
+     * @return string
      */
     private function storeAudio($filename, $new_filename): string
     {

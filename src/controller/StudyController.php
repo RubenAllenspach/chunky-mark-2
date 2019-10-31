@@ -4,6 +4,9 @@ namespace Controller;
 
 class StudyController
 {
+    /**
+     * Callback
+     */
     public function show($dc, $request)
     {
         $row = $dc['db']->getOne(

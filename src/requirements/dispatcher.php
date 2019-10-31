@@ -2,6 +2,8 @@
 
 $dispatcher = FastRoute\simpleDispatcher(
     function (FastRoute\RouteCollector $r) {
+        $r->addRoute('GET', '/', 'Controller\HomeController:redirectHome');
+
         $r->addRoute('GET', '/study/{id:\d+}', 'Controller\StudyController:show');
 
         $r->addRoute('GET', '/text/new', 'Controller\TextController:showNew');

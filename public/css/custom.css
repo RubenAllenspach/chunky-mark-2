@@ -13,8 +13,11 @@
 }
 
 #actions {
-    width: fit-content;
-    margin: -10px auto 0 auto;
+    text-align: center;
+}
+
+#actions .list-unstyled {
+    display: inline-block;
 }
 
 #actions ul li {

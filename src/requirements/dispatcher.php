@@ -8,6 +8,7 @@ $dispatcher = FastRoute\simpleDispatcher(
 
         $r->addRoute('GET', '/text/new', 'Controller\TextController:showNew');
         $r->addRoute('POST', '/text/new', 'Controller\TextController:store');
+        $r->addRoute('GET', '/text/delete/{id:\d+}', 'Controller\TextController:delete');
 
         $r->addRoute('GET', '/text/all', 'Controller\TextController:showAll');
     }

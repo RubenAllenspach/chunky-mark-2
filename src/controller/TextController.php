@@ -63,6 +63,21 @@ class TextController
     /**
      * Callback
      */
+    public function delete($dc, $request)
+    {
+        $dc['db']->query(
+            "UPDATE texts SET deleted=1 WHERE id=:id",
+            [':id' => $request['param']['id']]
+        );
+
+        header('Location: /text/all');
+
+        return '';
+    }
+
+    /**
+     * Callback
+     */
     public function store($dc, $request)
     {
         header('Content-Type: application/json');

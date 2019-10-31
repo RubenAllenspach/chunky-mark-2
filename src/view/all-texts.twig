@@ -19,9 +19,12 @@
                     <tr>
                         <td>{{ text.title }}</td>
                         <td>{{ text.created }}</td>
-                        <td>
+                        <td class="text-sm-right">
                             <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
                                 <span class="oi oi-media-play"></span>
+                            </a>
+                            <a href="/text/delete/{{ text.id }}" class="btn btn-danger btn-sm">
+                                <span class="oi oi-trash"></span>
                             </a>
                         </td>
                     </tr>

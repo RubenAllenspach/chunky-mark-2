@@ -2,12 +2,7 @@
 
 $dc = [];
 
-// db
-$sqlite = new PDO('sqlite:' . __DIR__ . '/../../application.sqlite3');
-$sqlite->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$sqlite->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-$dc['db'] = $sqlite;
+$dc['db'] = new \Lib\SQLiteManager\SQLiteManager('sqlite:' . __DIR__ . '/../../application.sqlite3');
 
 // twig
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../view');

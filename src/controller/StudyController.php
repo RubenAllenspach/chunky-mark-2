@@ -8,9 +8,10 @@ class StudyController
     {
         $db = $dc['db'];
 
-        $stmt = $db->prepare('SELECT * FROM texts WHERE id=:id');
-        $stmt->execute([':id' => $request['param']['id']]);
-        $row = $stmt->fetch();
+        $row = $db->getOne(
+            "SELECT * FROM texts WHERE id=:id",
+            [':id' => $request['param']['id']]
+        );
 
         $paragraphs = preg_split('/(\r\n|\r|\n)+/', $row['text']);
         $paragraphs_html = array_map(

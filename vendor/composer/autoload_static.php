@@ -22,6 +22,10 @@ class ComposerStaticInit59fe6092a560bad71b0ebbe3830f3a75
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
+        'L' => 
+        array (
+            'Lib\\' => 4,
+        ),
         'F' => 
         array (
             'FastRoute\\' => 10,
@@ -44,6 +48,10 @@ class ComposerStaticInit59fe6092a560bad71b0ebbe3830f3a75
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Lib\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/lib',
         ),
         'FastRoute\\' => 
         array (

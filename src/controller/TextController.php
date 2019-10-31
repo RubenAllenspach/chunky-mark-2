@@ -48,8 +48,7 @@ class TextController
     {
         $db = $dc['db'];
 
-        $stmt = $db->query("SELECT * FROM texts WHERE deleted=0");
-        $texts = $stmt->fetchAll();
+        $texts = $db->get("SELECT * FROM texts WHERE deleted=0");
 
         return $dc['twig']->render('all-texts.twig', ['texts' => $texts]);
     }
@@ -77,7 +76,7 @@ class TextController
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
 
-            $stmt = $db->prepare(
+            $db->query(
                 "INSERT INTO texts (
                     `title`,
                     `text`,
@@ -86,10 +85,7 @@ class TextController
                     :title,
                     :text,
                     :audio
-                )"
-            );
-
-            $stmt->execute(
+                )",
                 [
                     ':title' => $request['form']['title'],
                     ':text'  => $request['form']['text'],

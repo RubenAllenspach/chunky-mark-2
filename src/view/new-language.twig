@@ -1,0 +1,44 @@
+{% extends "base.twig" %}
+
+{% block title %}Neue Sprache{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="py-5">Neue Sprache</h1>
+
+        <div class="alert alert-danger d-none" role="alert" id="new-language-error"></div>
+
+        <form id="new-language" action="/language/new" method="post" enctype="multipart/form-data">
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Titel</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="title" name="title">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="character_range" class="col-sm-2 col-form-label">Zeichenbereich</label>
+
+                <div class="col-sm-10">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="character_range"
+                        name="character_range"
+                        placeholder="zb. \x{0370}-\x{03ff}\x{1f00}-\x{1fff}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Speichern</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+<script>
+$(NewLanguagePage.init);
+</script>
+
+{% endblock %}

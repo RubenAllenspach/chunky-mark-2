@@ -12,8 +12,9 @@ $dispatcher = FastRoute\simpleDispatcher(
 
         // study
         $r->addRoute('GET', '/study/{id:\d+}', 'Controller\StudyController:show');
-        $r->addRoute('POST', '/study/action/color-word', 'Controller\StudyController:colorWord');
-        $r->addRoute('POST', '/study/action/remove-color', 'Controller\StudyController:removeColor');
+        $r->addRoute('POST', '/study/action/color', 'Controller\StudyController:colorWord');
+        $r->addRoute('POST', '/study/action/color-remove', 'Controller\StudyController:removeColor');
+        $r->addRoute('POST', '/study/action/translation', 'Controller\StudyController:translation');
 
         // text
         $r->addRoute('GET', '/text/new', 'Controller\TextController:showNew');

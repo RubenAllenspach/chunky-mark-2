@@ -17,10 +17,15 @@ class StudyController
         $atoms = $db->get(
             "SELECT
                 text_atoms.*,
-                text_atom_color.color AS text_atom_color_color
+
+                text_atom_color.color AS text_atom_color_color,
+
+                text_atom_translation.translation AS text_atom_color_translation
             FROM text_atoms
                 LEFT JOIN text_atom_color
                     ON text_atom_color.fk_text_atom=text_atoms.id
+                LEFT JOIN text_atom_translation
+                    ON text_atom_translation.fk_text_atom=text_atoms.id
             WHERE text_atoms.fk_text=:fk_text
             ORDER BY text_atoms.`order`",
             [':fk_text' => $text_id]
@@ -30,13 +35,17 @@ class StudyController
 
         foreach ($atoms as $atom) {
             if ((int) $atom['is_word'] === 1) {
-                $color = '';
+                $classes = '';
 
                 if ((int) $atom['text_atom_color_color'] > 0) {
-                    $color = 'color-' . $atom['text_atom_color_color'];
+                    $classes .= ' color-' . $atom['text_atom_color_color'];
                 }
 
-                $html .= '<span class="word ' . $color . '" data-atomid="' . $atom['id'] . '">' . $atom['chars'] . '</span>';
+                if (strlen($atom['text_atom_color_translation']) > 0) {
+                    $classes .= ' translation-underline';
+                }
+
+                $html .= '<span class="word' . $classes . '" data-atomid="' . $atom['id'] . '" data-translation="' . htmlentities($atom['text_atom_color_translation']) . '">' . $atom['chars'] . '</span>';
             } else {
                 if (strpos($atom['chars'], "\n") !== false) {
                     /*
@@ -156,6 +165,51 @@ class StudyController
             "DELETE FROM text_atom_color WHERE fk_text_atom=:fk_text_atom",
             [':fk_text_atom' => intval($request['form']['id'])]
         );
+
+        header('Content-Type: application/json');
+
+        return json_encode(
+            [
+                'success' => $result === true ? 1 : 0
+            ]
+        );
+    }
+
+    /**
+     * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
+     */
+    public function translation($dc, $request)
+    {
+        $result = false;
+
+        if (
+            isset($request['form']['id']) && intval($request['form']['id']) > 0 &&
+            isset($request['form']['translation']) && strlen($request['form']['translation']) > 0
+        ) {
+            $dc['db']->query(
+                "DELETE FROM text_atom_translation WHERE fk_text_atom=:fk_text_atom",
+                [':fk_text_atom' => intval($request['form']['id'])]
+            );
+
+            $result = $dc['db']->query(
+                "INSERT INTO text_atom_translation (
+                    fk_text_atom,
+                    translation
+                ) VALUES (
+                    :fk_text_atom,
+                    :translation
+                )",
+                [
+                    ':fk_text_atom' => intval($request['form']['id']),
+                    ':translation'  => $request['form']['translation']
+                ]
+            );
+        }
 
         header('Content-Type: application/json');
 

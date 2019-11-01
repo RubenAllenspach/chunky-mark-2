@@ -224,6 +224,9 @@ var Study = (function () {
                     placement: 'top'
                 }
             );
+
+            // set translation input to translation of current element
+            $('[name="word-translation"]').val($(e.currentTarget).attr('data-translation'));
         });
 
         $(document).on('mouseup', function (e) {
@@ -243,26 +246,17 @@ var Study = (function () {
 
             if (color_id === '0') {
                 var request = $.ajax({
-                    url: '/study/action/remove-color',
+                    url: '/study/action/color-remove',
                     method: 'POST',
                     data: {
                         id:    id
                     }
                 });
             } else {
-                var request = $.ajax({
-                    url: '/study/action/color-word',
-                    method: 'POST',
-                    data: {
-                        id:    id,
-                        color: color_id
-                    }
-                });
-
                 $(currentPopper.reference).addClass('color-' + color_id);
 
                 var request = $.ajax({
-                    url: '/study/action/color-word',
+                    url: '/study/action/color',
                     method: 'POST',
                     data: {
                         id:    id,
@@ -272,6 +266,25 @@ var Study = (function () {
 
                 request.done(function(msg) {});
             }
+        });
+
+        $(document).on('click', '#add-translation', function () {
+            var id = $(currentPopper.reference).attr('data-atomid');
+            var translation = $('[name="word-translation"]').val();
+
+            $(currentPopper.reference).attr('data-translation', translation);
+            $(currentPopper.reference).addClass('translation-underline');
+
+            var request = $.ajax({
+                url: '/study/action/translation',
+                method: 'POST',
+                data: {
+                    id:          id,
+                    translation: translation
+                }
+            });
+
+            request.done(function(msg) {});
         });
 
         // decrease position

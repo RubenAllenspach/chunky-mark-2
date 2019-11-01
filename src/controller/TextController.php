@@ -47,7 +47,12 @@ class TextController
      */
     public function showNew($dc, $request)
     {
-        return $dc['twig']->render('new-text.twig', []);
+        $languages = $dc['db']->get("SELECT * FROM languages WHERE deleted=0");
+
+        return $dc['twig']->render(
+            'new-text.twig',
+            ['languages' => $languages]
+        );
     }
 
     /**
@@ -55,7 +60,16 @@ class TextController
      */
     public function showAll($dc, $request)
     {
-        $texts = $dc['db']->get("SELECT * FROM texts WHERE deleted=0");
+        // get texts with corresponding language title
+        $texts = $dc['db']->get(
+            "SELECT
+                texts.*,
+                languages.title AS language_title
+            FROM texts
+                INNER JOIN languages
+                    ON languages.id=texts.fk_language
+            WHERE texts.deleted=0"
+        );
 
         return $dc['twig']->render('all-texts.twig', ['texts' => $texts]);
     }
@@ -92,6 +106,7 @@ class TextController
         if (
             isset($request['form']['title']) && strlen($request['form']['title']) > 0 &&
             isset($request['form']['text']) && strlen($request['form']['text']) > 0 &&
+            isset($request['form']['language']) && (int) $request['form']['language'] > 0 &&
             isset($request['file']['audio']['type']) && in_array($request['file']['audio']['type'], $mimes)
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
@@ -100,16 +115,19 @@ class TextController
                 "INSERT INTO texts (
                     `title`,
                     `text`,
+                    `fk_language`,
                     `audio`
                 ) VALUES (
                     :title,
                     :text,
+                    :fk_language,
                     :audio
                 )",
                 [
-                    ':title' => $request['form']['title'],
-                    ':text'  => $request['form']['text'],
-                    ':audio' => $audio_name
+                    ':title'        => $request['form']['title'],
+                    ':text'         => $request['form']['text'],
+                    ':fk_language'  => $request['form']['language'],
+                    ':audio'        => $audio_name
                 ]
             );
 

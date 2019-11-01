@@ -10,6 +10,7 @@
             <thead>
                 <tr>
                     <th>Titel</th>
+                    <th>Sprache</th>
                     <th>Datum</th>
                     <th>Aktionen</th>
                 </tr>
@@ -18,6 +19,7 @@
                 {% for text in texts %}
                     <tr>
                         <td>{{ text.title }}</td>
+                        <td>{{ text.language_title }}</td>
                         <td>{{ text.created }}</td>
                         <td class="text-sm-right">
                             <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">

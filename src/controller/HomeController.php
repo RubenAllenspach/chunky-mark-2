@@ -19,6 +19,6 @@ class HomeController
      */
     public function doDB($dc, $request)
     {
-        return $dc['db']->query("-- SQL QUERY") ? 'yay' : 'nay';
+        return $dc['db']->query("-- QUERY") ? 'yay' : 'nay';
     }
 }

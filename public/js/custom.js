@@ -116,9 +116,11 @@ var Loader = (function () {
     };
 })();
 
-var TextLearning = (function () {
+var Study = (function () {
     var player = {};
     var rate = 1;
+
+    var currentPopper = {};
 
     const POS_JUMP = 2;
 
@@ -208,6 +210,84 @@ var TextLearning = (function () {
         $(document).on('click', '#progress-bar-wrapper', function (e) {
             player.setPos(100 / $(window).width() * e.clientX);
         });
+
+        $(document).on('click', 'span.word', function (e) {
+            $('.word').removeClass('word-active');
+            $(this).addClass('word-active');
+
+            $('.tools').show();
+
+            currentPopper = new Popper(
+                e.currentTarget,
+                $('.tools')[0],
+                {
+                    placement: 'top'
+                }
+            );
+        });
+
+        $(document).on('mouseup', function (e) {
+            var container = $('.tools');
+
+            // if the target of the click isn't the container nor a descendant of the container
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                unfocusWord();
+            }
+        });
+
+        $(document).on('click', '[name="text-word-color"]', function () {
+            var id = $(currentPopper.reference).attr('data-atomid');
+            var color_id = $(this).val();
+
+            $(currentPopper.reference).removeClass('color-1 color-2 color-3 color-4 color-5');
+
+            if (color_id === '0') {
+                var request = $.ajax({
+                    url: '/study/action/remove-color',
+                    method: 'POST',
+                    data: {
+                        id:    id
+                    }
+                });
+            } else {
+                var request = $.ajax({
+                    url: '/study/action/color-word',
+                    method: 'POST',
+                    data: {
+                        id:    id,
+                        color: color_id
+                    }
+                });
+
+                $(currentPopper.reference).addClass('color-' + color_id);
+
+                var request = $.ajax({
+                    url: '/study/action/color-word',
+                    method: 'POST',
+                    data: {
+                        id:    id,
+                        color: color_id
+                    }
+                });
+
+                request.done(function(msg) {});
+            }
+        });
+
+        // decrease position
+        hotkeys('esc', function(e, handler) {
+            unfocusWord();
+        });
+    }
+
+    function unfocusWord() {
+        $('.word').removeClass('word-active');
+
+        if (typeof currentPopper.destroy === 'function') {
+            currentPopper.destroy();
+        }
+
+        $('.tools').hide();
     }
 
     return {

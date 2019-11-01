@@ -6,6 +6,11 @@ class HomeController
 {
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function redirectHome($dc, $request)
     {
@@ -16,6 +21,11 @@ class HomeController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function doDB($dc, $request)
     {

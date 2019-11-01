@@ -8,9 +8,71 @@
             <h1 class="display-4">{{ title|default('kein Titel vorhanden') }}</h1>
 
             <div id="text-content-text">
-                <p>
-                    {{ paragraphs|default('kein Text vorhanden')|raw }}
-                </p>
+                {{ paragraphs|default('kein Text vorhanden')|raw }}
+            </div>
+        </div>
+    </div>
+
+    <div class="tools">
+        <div class="tools-translate">
+            <div class="input-group mb-3">
+                <input class="form-control form-control-sm" type="text" placeholder="Übersetzung">
+
+                <div class="input-group-append">
+                    <button
+                        class="btn btn-outline-secondary btn-sm"
+                        type="button"
+                        id="button-addon2">
+                        <span class="oi oi-check"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row"></div>
+
+        <div class="tools-colors">
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    style="background-color: #ffffff;"
+                    value="0">
+            </div>
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    class="color-1"
+                    value="1">
+            </div>
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    class="color-2"
+                    value="2">
+            </div>
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    class="color-3"
+                    value="3">
+            </div>
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    class="color-4"
+                    value="4">
+            </div>
+            <div>
+                <input
+                    type="button"
+                    name="text-word-color"
+                    class="color-5"
+                    value="5">
             </div>
         </div>
     </div>
@@ -40,10 +102,8 @@
 
 {% block js %}
     <script>
-
     $(function () {
-        TextLearning.init('{{ audio }}');
+        Study.init('{{ audio }}');
     });
-
     </script>
 {% endblock %}

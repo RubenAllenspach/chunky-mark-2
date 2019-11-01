@@ -1,3 +1,73 @@
+/* ### STUDY ### */
+
+.word {
+    padding: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.word:hover {
+    background-color: #212529;
+    color: #ffffff;
+}
+
+.word-active {
+    background-color: #212529;
+    color: #ffffff;
+}
+
+.tools {
+    width: 220px;
+    background-color: #212529;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 5px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    display: none;
+}
+
+.tools-colors {
+    padding: 0;
+}
+
+.tools .tools-colors div {
+    float: left;
+    margin: 0 5px 0 0;
+}
+
+.tools .tools-colors input {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 2px;
+
+    /* send value to the freakin moon */
+    text-indent: -9999px;
+}
+
+.color-1 {
+    color: #ffffff;
+    background-color: #247BA0;
+}
+
+.color-2 {
+    background-color: #70C1B3;
+}
+
+.color-3 {
+    background-color: #F3FFBD;
+}
+
+.color-4 {
+    background-color: #F7AA97;
+}
+
+.color-5 {
+    color: #ffffff;
+    background-color: #FF1654;
+}
+
 /* ### PLAYER ### */
 
 #player {

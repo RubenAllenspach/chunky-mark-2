@@ -12,6 +12,8 @@ $dispatcher = FastRoute\simpleDispatcher(
 
         // study
         $r->addRoute('GET', '/study/{id:\d+}', 'Controller\StudyController:show');
+        $r->addRoute('POST', '/study/action/color-word', 'Controller\StudyController:colorWord');
+        $r->addRoute('POST', '/study/action/remove-color', 'Controller\StudyController:removeColor');
 
         // text
         $r->addRoute('GET', '/text/new', 'Controller\TextController:showNew');

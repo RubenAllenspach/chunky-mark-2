@@ -44,6 +44,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function showNew($dc, $request)
     {
@@ -57,6 +62,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function showAll($dc, $request)
     {
@@ -76,6 +86,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function delete($dc, $request)
     {
@@ -144,6 +159,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function processAtoms($dc, $request)
     {
@@ -169,6 +189,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function rebuildAtoms($dc, $request)
     {
@@ -192,6 +217,11 @@ class TextController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function store($dc, $request)
     {
@@ -212,6 +242,9 @@ class TextController
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
 
+            // replace funky newlines with normal ones
+            $text = preg_replace("/\r|\r\n/", "\n", $request['form']['text']);
+
             $dc['db']->query(
                 "INSERT INTO texts (
                     `title`,
@@ -226,7 +259,7 @@ class TextController
                 )",
                 [
                     ':title'        => trim($request['form']['title']),
-                    ':text'         => trim($request['form']['text']),
+                    ':text'         => trim($text),
                     ':fk_language'  => intval($request['form']['language']),
                     ':audio'        => $audio_name
                 ]
@@ -234,7 +267,7 @@ class TextController
 
             $last_id = $dc['db']->var("SELECT seq FROM sqlite_sequence WHERE name=\"texts\"");
 
-            $this->storeAtoms($dc['db'], (int) $last_id, $request['form']['text'], $request['form']['language']);
+            $this->storeAtoms($dc['db'], (int) $last_id, $text, $request['form']['language']);
 
             return json_encode(
                 [

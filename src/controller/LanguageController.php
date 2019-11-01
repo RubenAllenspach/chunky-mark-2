@@ -6,6 +6,11 @@ class LanguageController
 {
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function showNew($dc, $request)
     {
@@ -14,6 +19,11 @@ class LanguageController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function showAll($dc, $request)
     {
@@ -24,6 +34,11 @@ class LanguageController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function delete($dc, $request)
     {
@@ -39,6 +54,11 @@ class LanguageController
 
     /**
      * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
      */
     public function store($dc, $request)
     {

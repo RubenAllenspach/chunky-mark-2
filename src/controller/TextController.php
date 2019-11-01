@@ -89,6 +89,107 @@ class TextController
         return '';
     }
 
+    private function storeAtoms($db, $text_id, $text, $language_id)
+    {
+        $character_range = $db->var(
+            "SELECT character_range FROM languages WHERE id=:id",
+            [':id' => $language_id]
+        );
+
+        // "cut" before and after a word
+        $r_split_atom = '/(
+            (?<=[^' . $character_range . '])
+            (?=[' . $character_range . '])
+            |
+            (?<=[' . $character_range . '])
+            (?=[^' . $character_range . '])
+        )/xu';
+
+        $atoms = preg_split($r_split_atom, trim($text));
+
+        // regex to match a word in this language
+        $r_word = '/^[' . $character_range . ']+$/xu';
+
+        $i = 1;
+        foreach ($atoms as $atom) {
+            $db->query(
+                'INSERT INTO text_atoms (
+                    chars,
+                    fk_text,
+                    is_word,
+                    `order`
+                ) VALUES (
+                    :chars,
+                    :fk_text,
+                    :is_word,
+                    :order
+                )',
+                [
+                    ':chars'   => $atom,
+                    ':fk_text' => $text_id,
+                    ':is_word' => (
+                        preg_match(
+                            // regex for word match
+                            $r_word,
+                            $atom
+                        ) === 1 ? 1 : 0
+                    ),
+                    ':order'   => $i
+                ]
+            );
+
+            $i++;
+        }
+    }
+
+    /**
+     * Callback
+     */
+    public function processAtoms($dc, $request)
+    {
+        $texts = $dc['db']->get("SELECT * FROM texts WHERE deleted=0");
+        $atoms = $dc['db']->get("SELECT DISTINCT fk_text FROM text_atoms");
+
+        $atom_text_ids = array_map(function ($a) { return $a['fk_text']; }, $atoms);
+
+        $processed = [];
+
+        foreach ($texts as $text) {
+            if (!in_array($text['id'], $atom_text_ids)) {
+                $processed[] = $text['id'];
+
+                $this->storeAtoms($dc['db'], $text['id'], $text['text'], $text['fk_language']);
+            }
+        }
+
+        header('Content-Type: application/json');
+
+        return json_encode($processed);
+    }
+
+    /**
+     * Callback
+     */
+    public function rebuildAtoms($dc, $request)
+    {
+        // delete all atoms
+        $dc['db']->query("DELETE FROM text_atoms");
+
+        $texts = $dc['db']->get("SELECT * FROM texts WHERE deleted=0");
+
+        $processed = [];
+
+        foreach ($texts as $text) {
+            $processed[] = $text['id'];
+
+            $this->storeAtoms($dc['db'], $text['id'], $text['text'], $text['fk_language']);
+        }
+
+        header('Content-Type: application/json');
+
+        return json_encode($processed);
+    }
+
     /**
      * Callback
      */
@@ -106,7 +207,7 @@ class TextController
         if (
             isset($request['form']['title']) && strlen($request['form']['title']) > 0 &&
             isset($request['form']['text']) && strlen($request['form']['text']) > 0 &&
-            isset($request['form']['language']) && (int) $request['form']['language'] > 0 &&
+            isset($request['form']['language']) && intval($request['form']['language']) > 0 &&
             isset($request['file']['audio']['type']) && in_array($request['file']['audio']['type'], $mimes)
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
@@ -124,12 +225,16 @@ class TextController
                     :audio
                 )",
                 [
-                    ':title'        => $request['form']['title'],
-                    ':text'         => $request['form']['text'],
-                    ':fk_language'  => $request['form']['language'],
+                    ':title'        => trim($request['form']['title']),
+                    ':text'         => trim($request['form']['text']),
+                    ':fk_language'  => intval($request['form']['language']),
                     ':audio'        => $audio_name
                 ]
             );
+
+            $last_id = $dc['db']->var("SELECT seq FROM sqlite_sequence WHERE name=\"texts\"");
+
+            $this->storeAtoms($dc['db'], (int) $last_id, $request['form']['text'], $request['form']['language']);
 
             return json_encode(
                 [

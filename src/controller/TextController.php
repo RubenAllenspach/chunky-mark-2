@@ -197,8 +197,16 @@ class TextController
      */
     public function rebuildAtoms($dc, $request)
     {
-        // delete all atoms
+        // delete all atoms and linked data
         $dc['db']->query("DELETE FROM text_atoms");
+        // reset auto increment
+        $dc['db']->query("DELETE FROM sqlite_sequence WHERE name='text_atoms'");
+
+        $dc['db']->query("DELETE FROM text_atom_color");
+        $dc['db']->query("DELETE FROM sqlite_sequence WHERE name='text_atom_color'");
+
+        $dc['db']->query("DELETE FROM text_atom_translation");
+        $dc['db']->query("DELETE FROM sqlite_sequence WHERE name='text_atom_translation'");
 
         $texts = $dc['db']->get("SELECT * FROM texts WHERE deleted=0");
 

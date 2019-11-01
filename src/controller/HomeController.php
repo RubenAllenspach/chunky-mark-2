@@ -9,8 +9,16 @@ class HomeController
      */
     public function redirectHome($dc, $request)
     {
-        header("Location: /text/all");
+        header('Location: /text/all');
 
-        return "";
+        return '';
+    }
+
+    /**
+     * Callback
+     */
+    public function doDB($dc, $request)
+    {
+        return $dc['db']->query("-- SQL QUERY") ? 'yay' : 'nay';
     }
 }

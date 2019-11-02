@@ -6,33 +6,43 @@
     <div class="container">
         <h1 class="py-5">Alle Texte</h1>
 
-        <table class="table" id="text-list">
-            <thead>
-                <tr>
-                    <th>Titel</th>
-                    <th>Sprache</th>
-                    <th>Datum</th>
-                    <th>Aktionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for text in texts %}
-                    <tr>
-                        <td>{{ text.title }}</td>
-                        <td>{{ text.language_title }}</td>
-                        <td>{{ text.created }}</td>
-                        <td class="text-sm-right">
-                            <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
-                                <span class="oi oi-media-play"></span>
-                            </a>
-                            <a href="/text/delete/{{ text.id }}" class="btn btn-danger btn-sm">
-                                <span class="oi oi-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-12 pb-5 text-right">
+                <a href="/text/new" class="btn btn-primary">Neuer Text</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table" id="text-list">
+                    <thead>
+                        <tr>
+                            <th>Titel</th>
+                            <th>Sprache</th>
+                            <th>Datum</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for text in texts %}
+                            <tr>
+                                <td>{{ text.title }}</td>
+                                <td>{{ text.language_title }}</td>
+                                <td>{{ text.created }}</td>
+                                <td class="text-sm-right">
+                                    <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
+                                        <span class="oi oi-media-play"></span>
+                                    </a>
+                                    <a href="/text/delete/{{ text.id }}" class="btn btn-danger btn-sm">
+                                        <span class="oi oi-trash"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

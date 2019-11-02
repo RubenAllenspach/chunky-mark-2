@@ -273,7 +273,12 @@ var Study = (function () {
             var translation = $('[name="word-translation"]').val();
 
             $(currentPopper.reference).attr('data-translation', translation);
-            $(currentPopper.reference).addClass('translation-underline');
+
+            if (translation.length > 0) {
+                $(currentPopper.reference).addClass('translation-underline');
+            } else {
+                $(currentPopper.reference).removeClass('translation-underline');
+            }
 
             var request = $.ajax({
                 url: '/study/action/translation',

@@ -189,26 +189,30 @@ class StudyController
 
         if (
             isset($request['form']['id']) && intval($request['form']['id']) > 0 &&
-            isset($request['form']['translation']) && strlen($request['form']['translation']) > 0
+            isset($request['form']['translation'])
         ) {
             $dc['db']->query(
                 "DELETE FROM text_atom_translation WHERE fk_text_atom=:fk_text_atom",
                 [':fk_text_atom' => intval($request['form']['id'])]
             );
 
-            $result = $dc['db']->query(
-                "INSERT INTO text_atom_translation (
-                    fk_text_atom,
-                    translation
-                ) VALUES (
-                    :fk_text_atom,
-                    :translation
-                )",
-                [
-                    ':fk_text_atom' => intval($request['form']['id']),
-                    ':translation'  => $request['form']['translation']
-                ]
-            );
+            if (strlen($request['form']['translation']) > 0) {
+                $result = $dc['db']->query(
+                    "INSERT INTO text_atom_translation (
+                        fk_text_atom,
+                        translation
+                    ) VALUES (
+                        :fk_text_atom,
+                        :translation
+                    )",
+                    [
+                        ':fk_text_atom' => intval($request['form']['id']),
+                        ':translation'  => $request['form']['translation']
+                    ]
+                );
+            } else {
+                $result = true;
+            }
         }
 
         header('Content-Type: application/json');

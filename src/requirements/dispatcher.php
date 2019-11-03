@@ -19,6 +19,8 @@ $dispatcher = FastRoute\simpleDispatcher(
         // text
         $r->addRoute('GET', '/text/new', 'Controller\TextController:showNew');
         $r->addRoute('POST', '/text/new', 'Controller\TextController:store');
+        $r->addRoute('GET', '/text/edit/{id:\d+}', 'Controller\TextController:showEdit');
+        $r->addRoute('POST', '/text/edit/{id:\d+}', 'Controller\TextController:storeEdit');
         $r->addRoute('GET', '/text/delete/{id:\d+}', 'Controller\TextController:delete');
         $r->addRoute('GET', '/text/all', 'Controller\TextController:showAll');
 

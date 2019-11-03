@@ -68,6 +68,31 @@ class TextController
      *
      * @return string
      */
+    public function showEdit($dc, $request)
+    {
+        $languages = $dc['db']->get("SELECT * FROM languages WHERE deleted=0");
+        $text = $dc['db']->getOne(
+            "SELECT * FROM texts WHERE id=:id",
+            [':id' => $request['param']['id']]
+        );
+
+        return $dc['twig']->render(
+            'edit-text.twig',
+            [
+                'languages' => $languages,
+                'text' => $text
+            ]
+        );
+    }
+
+    /**
+     * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
+     */
     public function showAll($dc, $request)
     {
         // get texts with corresponding language title
@@ -221,6 +246,110 @@ class TextController
         header('Content-Type: application/json');
 
         return json_encode($processed);
+    }
+
+    /**
+     * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
+     */
+    public function storeEdit($dc, $request)
+    {
+        header('Content-Type: application/json');
+
+        $mimes = [
+            'audio/mp3',
+            'audio/mpeg',
+            'audio/vnd.wav',
+            'audio/ogg'
+        ];
+
+        if (
+            isset($request['form']['title']) && strlen($request['form']['title']) > 0 &&
+            isset($request['form']['language']) && intval($request['form']['language']) > 0
+        ) {
+            $text_id = intval($request['param']['id']);
+
+            // store title and language id for sure
+            $dc['db']->query(
+                "UPDATE texts
+                SET
+                    `title`=:title,
+                    `fk_language`=:fk_language
+                WHERE id=:id",
+                [
+                    ':title'       => trim($request['form']['title']),
+                    ':fk_language' => intval($request['form']['language']),
+                    ':id'          => $text_id
+                ]
+            );
+
+            // if audio is available change that too
+            if (
+                isset($request['file']['audio']['type']) &&
+                in_array($request['file']['audio']['type'], $mimes)
+            ) {
+                $audio_name = $this->storeAudio(
+                    $request['file']['audio']['tmp_name'],
+                    $request['file']['audio']['name']
+                );
+
+                $dc['db']->query(
+                    "UPDATE texts SET `audio`=:audio WHERE id=:id",
+                    [
+                        ':audio' => $audio_name,
+                        ':id'    => $text_id
+                    ]
+                );
+            }
+
+            // get old text for comparison
+            $old_text = $dc['db']->var(
+                "SELECT `text` FROM texts WHERE id=:id",
+                [':id' => $text_id]
+            );
+
+            // process and store new text
+            if (
+                isset($request['form']['text']) &&
+                strlen($request['form']['text']) > 0 &&
+                $old_text !== $request['form']['text']
+            ) {
+                // replace funky newlines with normal ones
+                $text = preg_replace("/\r|\r\n/", "\n", $request['form']['text']);
+
+                $dc['db']->query(
+                    "UPDATE texts SET `text`=:text WHERE id=:id",
+                    [
+                        ':text' => $text,
+                        ':id'   => $text_id
+                    ]
+                );
+
+                $this->storeAtoms(
+                    $dc['db'],
+                    (int) $text_id,
+                    $text,
+                    $request['form']['language']
+                );
+            }
+
+            return json_encode(
+                [
+                    'success' => 1
+                ]
+            );
+        } else {
+            return json_encode(
+                [
+                    'success' => 0,
+                    'msg' => 'Füllen sie alle Felder korrekt aus'
+                ]
+            );
+        }
     }
 
     /**

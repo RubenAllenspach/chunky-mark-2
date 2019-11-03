@@ -354,6 +354,43 @@ var NewTextPage = (function () {
     }
 })();
 
+var EditTextPage = (function () {
+    function sendForm(e) {
+        var formData = new FormData(e.currentTarget);
+
+        $.ajax({
+            url: $(e.currentTarget).attr('action'),
+            type: 'POST',
+            data: formData,
+            success: function (data) {
+                if (data.success === 1) {
+                    window.location.href = '/text/all'
+                } else {
+                    $('#new-text-error').text(data.msg)
+                    $('#new-text-error').attr('style', 'display: block !important;');
+                }
+
+                Loader.hide();
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
+    return {
+        init: function () {
+            $('form#new-text').submit(function(e) {
+                e.preventDefault();
+
+                Loader.show();
+
+                sendForm(e);
+            });
+        }
+    }
+})();
+
 var NewLanguagePage = (function () {
     function sendForm(e) {
         var formData = new FormData(e.currentTarget);

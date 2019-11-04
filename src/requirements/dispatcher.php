@@ -8,6 +8,7 @@ $dispatcher = FastRoute\simpleDispatcher(
         // util
         $r->addRoute('GET', '/u/do-db', 'Controller\UtilController:doDB');
         $r->addRoute('GET', '/u/cleanup-db', 'Controller\UtilController:cleanupDB');
+        $r->addRoute('GET', '/u/cleanup-audio', 'Controller\UtilController:cleanupAudio');
         $r->addRoute('GET', '/u/process-atoms', 'Controller\UtilController:processAtoms');
         $r->addRoute('GET', '/u/rebuild-atoms', 'Controller\UtilController:rebuildAtoms');
 

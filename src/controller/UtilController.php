@@ -141,4 +141,43 @@ class UtilController
 
         return json_encode($processed);
     }
+
+    /**
+     * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
+     */
+    public function cleanupAudio($dc, $request)
+    {
+        $audio_path = __DIR__ . '/../../public/audio/';
+        $texts = $dc['db']->get("SELECT audio FROM texts");
+        $audios = array_map(
+            function ($t) {
+                return $t['audio'];
+            },
+            $texts
+        );
+        $files = scandir($audio_path);
+        $deleted = [];
+
+        foreach ($files as $file) {
+            if (
+                $file !== '.' &&
+                $file !== '..' &&
+                is_file($audio_path . $file) &&
+                !in_array($file, $audios)
+            ) {
+                if (unlink($audio_path . $file)) {
+                    $deleted[] = $file;
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+
+        return json_encode($deleted);
+    }
 }

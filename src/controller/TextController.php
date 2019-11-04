@@ -353,7 +353,15 @@ class TextController
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
 
             // replace funky newlines with normal ones
-            $text = preg_replace("/\r|\r\n/", "\n", $request['form']['text']);
+            $text = str_replace(
+                "\r",
+                "\n",
+                str_replace(
+                    "\r\n",
+                    "\n",
+                    $request['form']['text']
+                )
+            );
 
             $dc['db']->query(
                 "INSERT INTO texts (

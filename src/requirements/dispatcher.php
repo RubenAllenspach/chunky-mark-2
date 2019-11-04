@@ -6,9 +6,10 @@ $dispatcher = FastRoute\simpleDispatcher(
         $r->addRoute('GET', '/', 'Controller\HomeController:redirectHome');
 
         // util
-        $r->addRoute('GET', '/u/db', 'Controller\HomeController:doDB');
-        $r->addRoute('GET', '/u/process-atoms', 'Controller\TextController:processAtoms');
-        $r->addRoute('GET', '/u/rebuild-atoms', 'Controller\TextController:rebuildAtoms');
+        $r->addRoute('GET', '/u/do-db', 'Controller\UtilController:doDB');
+        $r->addRoute('GET', '/u/cleanup-db', 'Controller\UtilController:cleanupDB');
+        $r->addRoute('GET', '/u/process-atoms', 'Controller\UtilController:processAtoms');
+        $r->addRoute('GET', '/u/rebuild-atoms', 'Controller\UtilController:rebuildAtoms');
 
         // study
         $r->addRoute('GET', '/study/{id:\d+}', 'Controller\StudyController:show');

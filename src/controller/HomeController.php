@@ -18,17 +18,4 @@ class HomeController
 
         return '';
     }
-
-    /**
-     * Callback
-     *
-     * @param array $dc
-     * @param array $request
-     *
-     * @return string
-     */
-    public function doDB($dc, $request)
-    {
-        return $dc['db']->query("-- QUERY") ? 'yay' : 'nay';
-    }
 }

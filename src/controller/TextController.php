@@ -347,19 +347,27 @@ class TextController
                 [':id' => $text_id]
             );
 
+            // replace funky newlines with normal ones
+            $new_text = str_replace(
+                "\r",
+                "\n",
+                str_replace(
+                    "\r\n",
+                    "\n",
+                    $request['form']['text']
+                )
+            );
+
             // process and store new text
             if (
                 isset($request['form']['text']) &&
                 strlen($request['form']['text']) > 0 &&
-                $old_text !== $request['form']['text']
+                $old_text !== $new_text
             ) {
-                // replace funky newlines with normal ones
-                $text = preg_replace("/\r|\r\n/", "\n", $request['form']['text']);
-
                 $dc['db']->query(
                     "UPDATE texts SET `text`=:text WHERE id=:id",
                     [
-                        ':text' => $text,
+                        ':text' => $new_text,
                         ':id'   => $text_id
                     ]
                 );
@@ -369,7 +377,7 @@ class TextController
                 $this->storeAtoms(
                     $dc['db'],
                     (int) $text_id,
-                    $text,
+                    $new_text,
                     $request['form']['language']
                 );
             }

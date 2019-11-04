@@ -154,19 +154,28 @@ var Study = (function () {
     }
 
     /**
-     * Set event handlers
+     * Remove focus (tooltip and highlight) on word
      */
-    function setEvents() {
+    function unfocusWord() {
+        $('.word').removeClass('word-active');
+
+        if (typeof currentPopper.destroy === 'function') {
+            currentPopper.destroy();
+        }
+
+        $('.tools').hide();
+    }
+
+    /**
+     * Set keyboard shortcuts
+     */
+    function setKeyboardShortcuts() {
         // toggle play
         hotkeys('space', function(e, handler) {
             e.preventDefault();
 
             togglePlayerState();
         });
-
-        $(document).on('click', '#action-toggle-play', function () {
-            togglePlayerState();
-        })
 
         // increase position
         hotkeys('up', function(e, handler) {
@@ -194,6 +203,22 @@ var Study = (function () {
         // decrease position
         hotkeys('left', function(e, handler) {
             player.decreasePosition(POS_JUMP);
+        });
+
+        // decrease position
+        hotkeys('esc', function(e, handler) {
+            unfocusWord();
+        });
+    }
+
+    /**
+     * Set event handlers
+     */
+    function setEvents() {
+        setKeyboardShortcuts();
+
+        $(document).on('click', '#action-toggle-play', function () {
+            togglePlayerState();
         });
 
         // jump x seconds to the right
@@ -291,21 +316,6 @@ var Study = (function () {
 
             request.done(function(msg) {});
         });
-
-        // decrease position
-        hotkeys('esc', function(e, handler) {
-            unfocusWord();
-        });
-    }
-
-    function unfocusWord() {
-        $('.word').removeClass('word-active');
-
-        if (typeof currentPopper.destroy === 'function') {
-            currentPopper.destroy();
-        }
-
-        $('.tools').hide();
     }
 
     return {

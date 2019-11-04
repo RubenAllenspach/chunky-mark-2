@@ -110,7 +110,8 @@ class TextController
             FROM texts
                 INNER JOIN languages
                     ON languages.id=texts.fk_language
-            WHERE texts.deleted=0"
+            WHERE texts.deleted=0
+            ORDER BY created DESC"
         );
 
         return $dc['twig']->render('all-texts.twig', ['texts' => $texts]);

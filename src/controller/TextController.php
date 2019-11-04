@@ -6,6 +6,13 @@ class TextController
 {
     private $audio_path = __DIR__ . '/../../public/audio/';
 
+    const ALLOWED_MIMES = [
+        'audio/mp3',
+        'audio/mpeg',
+        'audio/vnd.wav',
+        'audio/ogg'
+    ];
+
     /**
      * Generates a random string
      *
@@ -131,6 +138,12 @@ class TextController
 
     private function storeAtoms($db, $text_id, $text, $language_id)
     {
+        // delete preexisting atoms of that text
+        $db->query(
+            "DELETE FROM text_atoms WHERE fk_text=:fk_text",
+            [':fk_text' => $text_id]
+        );
+
         $character_range = $db->var(
             "SELECT character_range FROM languages WHERE id=:id",
             [':id' => $language_id]
@@ -248,6 +261,35 @@ class TextController
         return json_encode($processed);
     }
 
+    private function deleteTextAnnotations($db, $text_id): bool
+    {
+        $result = [];
+
+        // delete highlights
+        $result[] = $db->query(
+            "DELETE FROM text_atom_color
+            WHERE fk_text_atom IN (
+                SELECT id
+                FROM text_atoms
+                WHERE fk_text=:fk_text
+            )",
+            [':fk_text' => $text_id]
+        );
+
+        // delete translations
+        $result[] = $db->query(
+            "DELETE FROM text_atom_translation
+            WHERE fk_text_atom IN (
+                SELECT id
+                FROM text_atoms
+                WHERE fk_text=:fk_text
+            )",
+            [':fk_text' => $text_id]
+        );
+
+        return !in_array(false, $result);
+    }
+
     /**
      * Callback
      *
@@ -259,13 +301,6 @@ class TextController
     public function storeEdit($dc, $request)
     {
         header('Content-Type: application/json');
-
-        $mimes = [
-            'audio/mp3',
-            'audio/mpeg',
-            'audio/vnd.wav',
-            'audio/ogg'
-        ];
 
         if (
             isset($request['form']['title']) && strlen($request['form']['title']) > 0 &&
@@ -290,7 +325,7 @@ class TextController
             // if audio is available change that too
             if (
                 isset($request['file']['audio']['type']) &&
-                in_array($request['file']['audio']['type'], $mimes)
+                in_array($request['file']['audio']['type'], self::ALLOWED_MIMES)
             ) {
                 $audio_name = $this->storeAudio(
                     $request['file']['audio']['tmp_name'],
@@ -298,7 +333,7 @@ class TextController
                 );
 
                 $dc['db']->query(
-                    "UPDATE texts SET `audio`=:audio WHERE id=:id",
+                    "UPDATE texts SET audio=:audio WHERE id=:id",
                     [
                         ':audio' => $audio_name,
                         ':id'    => $text_id
@@ -328,6 +363,8 @@ class TextController
                         ':id'   => $text_id
                     ]
                 );
+
+                $this->deleteTextAnnotations($dc['db'], $text_id);
 
                 $this->storeAtoms(
                     $dc['db'],
@@ -364,18 +401,11 @@ class TextController
     {
         header('Content-Type: application/json');
 
-        $mimes = [
-            'audio/mp3',
-            'audio/mpeg',
-            'audio/vnd.wav',
-            'audio/ogg'
-        ];
-
         if (
             isset($request['form']['title']) && strlen($request['form']['title']) > 0 &&
             isset($request['form']['text']) && strlen($request['form']['text']) > 0 &&
             isset($request['form']['language']) && intval($request['form']['language']) > 0 &&
-            isset($request['file']['audio']['type']) && in_array($request['file']['audio']['type'], $mimes)
+            isset($request['file']['audio']['type']) && in_array($request['file']['audio']['type'], self::ALLOWED_MIMES)
         ) {
             $audio_name = $this->storeAudio($request['file']['audio']['tmp_name'], $request['file']['audio']['name']);
 

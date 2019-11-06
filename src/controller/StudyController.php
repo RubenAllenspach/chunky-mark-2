@@ -45,7 +45,9 @@ class StudyController
                     $classes .= ' translation-underline';
                 }
 
-                $html .= '<span class="word' . $classes . '" data-atomid="' . $atom['id'] . '" data-translation="' . htmlentities($atom['text_atom_color_translation']) . '">' . $atom['chars'] . '</span>';
+                $translation = htmlentities($atom['text_atom_color_translation']);
+
+                $html .= '<span class="word' . $classes . '" data-atomid="' . $atom['id'] . '" data-translation="' . $translation . '" title="' . $translation . '">' . $atom['chars'] . '</span>';
             } else {
                 if (strpos($atom['chars'], "\n") !== false) {
                     /*

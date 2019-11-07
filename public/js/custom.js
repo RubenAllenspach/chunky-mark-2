@@ -14,15 +14,15 @@ var Player = /** @class */ (function () {
                 // remove pitch from fast/slow playpack rate
                 html5: true,
 
+                loop: true,
+
                 // when sound plays
                 onplay: function() {
                     requestAnimationFrame(self.step.bind(self));
                 },
 
                 // when sound ends
-                onend: function() {
-                    this.play();
-                },
+                onend: function() {},
 
                 onpause: function() {},
 

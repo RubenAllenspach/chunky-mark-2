@@ -167,6 +167,37 @@ var Study = (function () {
     }
 
     /**
+     * store translation
+     */
+    function storeTranslation() {
+        $('[name="word-translation"]').prop('disabled', true);
+
+        var id = $(currentPopper.reference).attr('data-atomid');
+        var translation = $('[name="word-translation"]').val();
+
+        $(currentPopper.reference).attr('data-translation', translation);
+
+        if (translation.length > 0) {
+            $(currentPopper.reference).addClass('translation-underline');
+        } else {
+            $(currentPopper.reference).removeClass('translation-underline');
+        }
+
+        var request = $.ajax({
+            url: '/study/action/translation',
+            method: 'POST',
+            data: {
+                id:          id,
+                translation: translation
+            }
+        });
+
+        request.done(function(msg) {
+            $('[name="word-translation"]').prop('disabled', false);
+        });
+    }
+
+    /**
      * Set keyboard shortcuts
      */
     function setKeyboardShortcuts() {
@@ -294,27 +325,13 @@ var Study = (function () {
         });
 
         $(document).on('click', '#add-translation', function () {
-            var id = $(currentPopper.reference).attr('data-atomid');
-            var translation = $('[name="word-translation"]').val();
+            storeTranslation();
+        });
 
-            $(currentPopper.reference).attr('data-translation', translation);
-
-            if (translation.length > 0) {
-                $(currentPopper.reference).addClass('translation-underline');
-            } else {
-                $(currentPopper.reference).removeClass('translation-underline');
+        $(document).on('keyup', '[name="word-translation"]', function (e) {
+            if (e.keyCode === 13) {
+                storeTranslation();
             }
-
-            var request = $.ajax({
-                url: '/study/action/translation',
-                method: 'POST',
-                data: {
-                    id:          id,
-                    translation: translation
-                }
-            });
-
-            request.done(function(msg) {});
         });
     }
 

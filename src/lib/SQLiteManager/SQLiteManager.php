@@ -16,10 +16,32 @@ class SQLiteManager
 
     function __construct($path)
     {
-        $this->conn = new \PDO($path);
+        $create_tables = false;
+
+        if (!file_exists($path)) {
+            $create_tables = true;
+        }
+
+        $this->conn = new \PDO('sqlite:' . $path);
 
         $this->conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $this->conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+
+        if ($create_tables) {
+            $this->init();
+        }
+    }
+
+    /**
+     * Create tables and fill them with some data
+     *
+     * @return int|bool
+     */
+    private function init()
+    {
+        $sql = file_get_contents(__DIR__ . '/application.sqlite3.sql');
+
+        return $this->conn->exec($sql);
     }
 
     /**

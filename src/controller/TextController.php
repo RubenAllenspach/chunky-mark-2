@@ -36,6 +36,11 @@ class TextController
      */
     private function storeAudio($filename, $new_filename): string
     {
+        // create audio folder if it does not exist
+        if (!file_exists($this->audio_path)) {
+            mkdir($this->audio_path, 0777, true);
+        }
+
         $filename_pathinfo = pathinfo($new_filename);
 
         $name = $filename_pathinfo['filename'];

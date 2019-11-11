@@ -1,2 +1,9 @@
+# htaccess stuff
 /public/.htaccess bak
 .htpasswd
+
+# audio files (created automatically)
+/public/audio
+
+# database (created automatically)
+application.sqlite3

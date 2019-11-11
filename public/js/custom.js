@@ -197,6 +197,35 @@ var Study = (function () {
         });
     }
 
+    function colorWord(color_id) {
+        var id = $(currentPopper.reference).attr('data-atomid');
+
+        $(currentPopper.reference).removeClass('color-1 color-2 color-3 color-4 color-5');
+
+        if (color_id === '0') {
+            var request = $.ajax({
+                url: '/study/action/color-remove',
+                method: 'POST',
+                data: {
+                    id: id
+                }
+            });
+        } else {
+            $(currentPopper.reference).addClass('color-' + color_id);
+
+            var request = $.ajax({
+                url: '/study/action/color',
+                method: 'POST',
+                data: {
+                    id:    id,
+                    color: color_id
+                }
+            });
+
+            request.done(function(msg) {});
+        }
+    }
+
     /**
      * Set keyboard shortcuts
      */
@@ -295,33 +324,7 @@ var Study = (function () {
         });
 
         $(document).on('click', '[name="text-word-color"]', function () {
-            var id = $(currentPopper.reference).attr('data-atomid');
-            var color_id = $(this).val();
-
-            $(currentPopper.reference).removeClass('color-1 color-2 color-3 color-4 color-5');
-
-            if (color_id === '0') {
-                var request = $.ajax({
-                    url: '/study/action/color-remove',
-                    method: 'POST',
-                    data: {
-                        id:    id
-                    }
-                });
-            } else {
-                $(currentPopper.reference).addClass('color-' + color_id);
-
-                var request = $.ajax({
-                    url: '/study/action/color',
-                    method: 'POST',
-                    data: {
-                        id:    id,
-                        color: color_id
-                    }
-                });
-
-                request.done(function(msg) {});
-            }
+            colorWord($(this).val());
         });
 
         $(document).on('click', '#add-translation', function () {

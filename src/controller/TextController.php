@@ -10,6 +10,7 @@ class TextController
         'audio/mp3',
         'audio/mpeg',
         'audio/vnd.wav',
+        'audio/m4a',
         'audio/ogg'
     ];
 
@@ -35,13 +36,17 @@ class TextController
      */
     private function storeAudio($filename, $new_filename): string
     {
-        if (file_exists($this->audio_path . $new_filename)) {
-            $filename_pathinfo = pathinfo($new_filename);
+        $filename_pathinfo = pathinfo($new_filename);
 
-            $name = $filename_pathinfo['filename'];
-            $extension = $filename_pathinfo['extension'];
+        $name = $filename_pathinfo['filename'];
+        $extension = $filename_pathinfo['extension'];
 
-            $new_filename = $name . $this->randomString() . '.' . $extension;
+        $slug = \slugify($name);
+
+        if (file_exists($this->audio_path . $slug . '.' . $extension)) {
+            $new_filename = $slug . $this->randomString() . '.' . $extension;
+        } else {
+            $new_filename = $slug . '.' . $extension;
         }
 
         move_uploaded_file($filename, $this->audio_path . $new_filename);

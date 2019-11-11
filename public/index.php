@@ -7,6 +7,7 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);
 
 require_once __DIR__ . '/../src/requirements/dispatcher.php';
+require_once __DIR__ . '/../src/requirements/functions.php';
 
 // Fetch method and URI from somewhere
 $httpMethod = $_SERVER['REQUEST_METHOD'];

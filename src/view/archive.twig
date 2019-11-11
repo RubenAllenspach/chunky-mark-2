@@ -1,0 +1,50 @@
+{% extends "base.twig" %}
+
+{% block title %}Archiv{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="py-5">Archiv</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table" id="text-list">
+                    <thead>
+                        <tr>
+                            <th>Titel</th>
+                            <th>Sprache</th>
+                            <th>Datum</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for text in texts %}
+                            <tr>
+                                <td>{{ text.title }}</td>
+                                <td>{{ text.language_title }}</td>
+                                <td>{{ text.created }}</td>
+                                <td class="text-sm-right">
+                                    <a href="/archive/restore/{{ text.id }}" class="btn btn-warning btn-sm">
+                                        <span class="oi oi-action-undo"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(function () {
+        $('#text-list').DataTable(
+            {
+                'order': [[ 3, 'desc' ]]
+            }
+        );
+    })
+    </script>
+{% endblock %}

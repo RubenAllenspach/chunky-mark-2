@@ -29,6 +29,7 @@ $dispatcher = FastRoute\simpleDispatcher(
         $r->addRoute('POST', '/text/edit/{id:\d+}', 'Controller\TextController:storeEdit');
         $r->addRoute('GET', '/text/delete/{id:\d+}', 'Controller\TextController:delete');
         $r->addRoute('GET', '/text/all', 'Controller\TextController:showAll');
+        $r->addRoute('POST', '/text/toggle-star', 'Controller\TextController:toggleStar');
 
         // language - hidden
         $r->addRoute('GET', '/language/new', 'Controller\LanguageController:showNew');

@@ -121,7 +121,9 @@ class TextController
                 INNER JOIN languages
                     ON languages.id=texts.fk_language
             WHERE texts.deleted=0
-            ORDER BY created DESC"
+            ORDER BY
+                favorite DESC,
+                created DESC"
         );
 
         return $dc['twig']->render('all-texts.twig', ['texts' => $texts]);
@@ -410,5 +412,25 @@ class TextController
                 ]
             );
         }
+    }
+
+    /**
+     * Callback
+     *
+     * @param array $dc
+     * @param array $request
+     *
+     * @return string
+     */
+    public function toggleStar($dc, $request)
+    {
+        $result = $dc['db']->query(
+            "UPDATE texts SET favorite = 1 - favorite WHERE id=:id",
+            [':id' => $request['form']['id']]
+        ) !== false;
+
+        header('Content-Type: application/json');
+
+        return json_encode(['success' => $result ? 1 : 0]);
     }
 }

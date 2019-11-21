@@ -499,3 +499,39 @@ var NewLanguagePage = (function () {
         }
     }
 })();
+
+var HomePage = (function () {
+    function toggleStarred(id) {
+        Loader.show();
+
+        $.ajax({
+            url: '/text/toggle-star',
+            method: 'POST',
+            data: {id: id}
+        }).done(function (msg) {
+            if (msg.success === 1) {
+                window.location.reload(false);
+            }
+
+            Loader.hide();
+        });
+    }
+
+    function setEvents() {
+        $('[data-target="toggle-star"]').on('click', function (e) {
+            toggleStarred($(e.currentTarget).attr('data-id'));
+        });
+    }
+
+    return {
+        init: function () {
+            $('#text-list').DataTable(
+                {
+                    'order': [[ 0, 'desc' ], [ 3, 'desc' ]]
+                }
+            );
+
+            setEvents();
+        }
+    }
+})();

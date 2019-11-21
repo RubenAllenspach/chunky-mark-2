@@ -17,6 +17,7 @@
                 <table class="table" id="text-list">
                     <thead>
                         <tr>
+                            <th>Favorit</th>
                             <th>Titel</th>
                             <th>Sprache</th>
                             <th>Datum</th>
@@ -26,6 +27,14 @@
                     <tbody>
                         {% for text in texts %}
                             <tr>
+                                <td data-sort="{{ text.favorite }}">
+                                    <span
+                                        data-target="toggle-star"
+                                        data-id="{{ text.id }}"
+                                        class="star {% if text.favorite == 0 %}unstarred{% else %}starred{% endif %}">
+                                        <span class="oi oi-star"></span>
+                                    </span>
+                                </td>
                                 <td>{{ text.title }}</td>
                                 <td>{{ text.language_title }}</td>
                                 <td>{{ text.created }}</td>
@@ -53,12 +62,6 @@
 
 {% block js %}
     <script>
-    $(function () {
-        $('#text-list').DataTable(
-            {
-                'order': [[ 3, 'desc' ]]
-            }
-        );
-    })
+    $(HomePage.init)
     </script>
 {% endblock %}

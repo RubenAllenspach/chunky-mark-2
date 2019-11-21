@@ -99,6 +99,20 @@
     }
 }
 
+/* ### HOME ### */
+
+[data-target="toggle-star"] {
+    cursor: pointer;
+}
+
+.unstarred {
+    color: #aaa;
+}
+
+.starred {
+    color: #d4af37;
+}
+
 /* ### PLAYER ### */
 
 #player {

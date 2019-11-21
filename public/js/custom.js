@@ -296,8 +296,6 @@ var Study = (function () {
 
         // increase position
         hotkeys('ctrl+right', function(e, handler) {
-            console.log('reference' in currentPopper);
-
             e.preventDefault();
 
             focusNextWord();
@@ -305,8 +303,6 @@ var Study = (function () {
 
         // decrease position
         hotkeys('ctrl+left', function(e, handler) {
-            console.log('reference' in currentPopper);
-
             e.preventDefault();
 
             focusPreviousWord();

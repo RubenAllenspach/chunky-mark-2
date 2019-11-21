@@ -226,6 +226,30 @@ var Study = (function () {
         }
     }
 
+    function focusNextWord() {
+        if ('reference' in currentPopper) {
+            if ($(currentPopper.reference).is('span.word:last')) {
+                $('span.word:first').trigger('click');
+            } else {
+                $(currentPopper.reference).nextAll('span.word:first').trigger('click');
+            }
+        } else {
+            $('span.word:first').trigger('click');
+        }
+    }
+
+    function focusPreviousWord() {
+        if ('reference' in currentPopper) {
+            if ($(currentPopper.reference).is('span.word:first')) {
+                $('span.word:last').trigger('click');
+            } else {
+                $(currentPopper.reference).prevAll('span.word:first').trigger('click');
+            }
+        } else {
+            $('span.word:last').trigger('click');
+        }
+    }
+
     /**
      * Set keyboard shortcuts
      */
@@ -265,9 +289,27 @@ var Study = (function () {
             player.decreasePosition(POS_JUMP);
         });
 
-        // decrease position
-        hotkeys('esc', function(e, handler) {
+        // unfocus input field or hide popper if no focus on input
+        hotkeys('esc', function (e, handler) {
             unfocusWord();
+        });
+
+        // increase position
+        hotkeys('ctrl+right', function(e, handler) {
+            console.log('reference' in currentPopper);
+
+            e.preventDefault();
+
+            focusNextWord();
+        });
+
+        // decrease position
+        hotkeys('ctrl+left', function(e, handler) {
+            console.log('reference' in currentPopper);
+
+            e.preventDefault();
+
+            focusPreviousWord();
         });
     }
 
@@ -334,6 +376,10 @@ var Study = (function () {
         $(document).on('keyup', '[name="word-translation"]', function (e) {
             if (e.keyCode === 13) {
                 storeTranslation();
+            }
+            // esc
+            else if (e.keyCode === 27) {
+                $(this).blur();
             }
         });
     }

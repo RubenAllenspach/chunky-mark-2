@@ -3,6 +3,73 @@
 {% block title %}Study{% endblock %}
 
 {% block content %}
+    <div id="keymap" data-toggle="modal" data-target="#modal-keymap">
+        <span class="oi oi-question-mark"></span>
+    </div>
+
+    <div class="modal fade" id="modal-keymap" tabindex="-1" role="dialog" aria-labelledby="modal-keymap-title" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-keymap-title">Keymap</h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th>Beschreibung</th>
+                            <th>Kürzel</th>
+                        </tr>
+                        <tr>
+                            <td>Wort rechts fokusieren</td>
+                            <td><kbd><kbd>ctrl</kbd> + <kbd>▶</kbd></kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Wort links fokusieren</td>
+                            <td><kbd><kbd>ctrl</kbd> + <kbd>◀</kbd></kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio 2 Sekunden nach vorn springen</td>
+                            <td><kbd>▶</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio 2 Sekunden nach hinten springen</td>
+                            <td><kbd>◀</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio schneller machen</td>
+                            <td><kbd>▲</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio langsamer machen</td>
+                            <td><kbd>▼</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio langsamer machen</td>
+                            <td><kbd>▼</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Audio Play/Pause</td>
+                            <td><kbd>Space</kbd></td>
+                        </tr>
+                        <tr>
+                            <td>Popup schliessen</td>
+                            <td><kbd>Esc</kbd></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div id="text-content">
             <h1 class="display-4">{{ title|default('kein Titel vorhanden') }}</h1>

@@ -72,6 +72,33 @@
     border-bottom: 1px dotted #212529;
 }
 
+#keymap {
+    width: 40px;
+    height: 40px;
+    color: #aaa;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1.3em;
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 400px) {
+    #keymap {
+        display: none;
+    }
+}
+
+/* Tablet Styles */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
+    #keymap {
+        display: none;
+    }
+}
+
 /* ### PLAYER ### */
 
 #player {

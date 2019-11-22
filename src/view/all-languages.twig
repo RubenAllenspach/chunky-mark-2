@@ -6,31 +6,38 @@
     <div class="container">
         <h1 class="py-5">Alle Sprachen</h1>
 
-        <table class="table" id="text-list">
-            <thead>
-                <tr>
-                    <th>Titel</th>
-                    <th>Datum</th>
-                    <th>Aktionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for language in languages %}
-                    <tr>
-                        <td>{{ language.title }}</td>
-                        <td>{{ language.created }}</td>
-                        <td class="text-sm-right">
-                            <a href="/study/{{ language.id }}" class="btn btn-primary btn-sm">
-                                <span class="oi oi-media-play"></span>
-                            </a>
-                            <a href="/language/delete/{{ language.id }}" class="btn btn-danger btn-sm">
-                                <span class="oi oi-trash"></span>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-12 pb-5 text-right">
+                <a href="/language/new" class="btn btn-primary">Neue Sprache</a>
+            </div>
+        </div>
+
+        <div class="row pb-5">
+            <div class="col-12">
+                <table class="table" id="language-list">
+                    <thead>
+                        <tr>
+                            <th>Titel</th>
+                            <th>Datum</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for language in languages %}
+                            <tr>
+                                <td>{{ language.title }}</td>
+                                <td>{{ language.created|date("d.m.Y") }}</td>
+                                <td class="text-sm-right">
+                                    <a href="/language/delete/{{ language.id }}" class="btn btn-danger btn-sm">
+                                        <span class="oi oi-trash"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -38,7 +45,11 @@
 
 <script>
 $(function () {
-    $('#language-list').DataTable();
+    $('#language-list').DataTable(
+        {
+            responsive: true
+        }
+    );
 })
 </script>
 

@@ -44,13 +44,7 @@
 {% block js %}
 
 <script>
-$(function () {
-    $('#language-list').DataTable(
-        {
-            responsive: true
-        }
-    );
-})
+$(LanguagePage.init);
 </script>
 
 {% endblock %}

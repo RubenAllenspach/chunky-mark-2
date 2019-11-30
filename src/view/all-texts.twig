@@ -38,7 +38,7 @@
                                 </td>
                                 <td>{{ text.title }}</td>
                                 <td>{{ text.language_title }}</td>
-                                <td>{{ text.created }}</td>
+                                <td>{{ text.created|date("d.m.Y") }}</td>
                                 <td class="text-sm-right">
                                     <a href="/study/{{ text.id }}" class="btn btn-primary btn-sm">
                                         <span class="oi oi-media-play"></span>
